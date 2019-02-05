@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t mreis43/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run mreis43/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t mreis43/multi-client ./client
+  - docker build -t mreis43/multi-nginx ./nginx
+  - docker build -t mreis43/multi-server ./server
+  - docker build -t mreis43/multi-worker ./worker
+
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those imgaes and push to docker hub
+  - docker push mreis43/multi-client
+  - docker push mreis43/multi-nginx
+  - docker push mreis43/multi-server
+  - docker push mreis43/multi-worker
+
+
