@@ -5,7 +5,7 @@
       "name": "client",
       "image": "stephengrider/multi-client",
       "hostname": "client",
-      "essential": true,
+      "essential": false,
       "memory": 128
     },
     {
@@ -25,14 +25,15 @@
     {
       "name": "nginx",
       "image": "stephengrider/multi-nginx",
+      "hostname": "nginx",
       "essential": true,
-      "portMappings":[
+      "portMappings": [
         {
           "hostPort": 80,
           "containerPort": 80
         }
       ],
-      "links": ["client","server"],
+      "links": ["client", "server"],
       "memory": 128
     }
   ]
